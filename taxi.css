@@ -1,0 +1,52 @@
+body{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:5em;
+    margin-bottom:5em;
+    padding:0;
+    width:80%;
+    font-family:sans-serif;
+    /*border:red solid thin;*/
+}
+
+#title{
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:1em;
+    margin-bottom:1em;
+    padding:0.2em;
+    text-align:center;
+    font-size:3em;
+    width:600px;
+    background-color:lightblue;
+    /*border:black solid;*/
+}
+
+
+#canvas{
+    margin-left: auto;
+    margin-right:auto;
+    margin-top:1em;
+    margin-bottom:1em;
+    width:500px;
+}
+
+canvas{
+    border:grey solid thin;
+}
+
+#control{
+    border:black solid thin;
+    margin:auto;
+    width:600px;
+    text-align:center;
+}
+
+
+#footer{
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:2em;
+    text-align:center;
+    /*    border:thin black solid; */
+}
