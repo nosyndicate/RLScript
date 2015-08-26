@@ -35,6 +35,10 @@ canvas{
     border:grey solid thin;
 }
 
+#info{
+	border:grey solid thin;
+}
+
 #control{
     border:black solid thin;
     margin:auto;
