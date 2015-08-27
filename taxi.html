@@ -28,28 +28,57 @@
     All these illegal action will cause a reward of -10 and change nothing.
     Thus, without any state abstraction, there are totally 500 states, including 25 position of the taxi, 4 possible location of the destination, and 5 possible location of the passenger (four colors and taxi).
     </div>
-    <div id="canvas">
-      <canvas width="500" height="500" id="taxi"></canvas>
-      <div id="info">dfsd</div>
+    <div id="main">
+    	<div id="canvas">
+      		<canvas width="500" height="500" id="taxi"></canvas>
+    	</div>
+    	<div id="info">iteration:0</div>
+    	<div id="control">
+      		<button id="start">Start Learning</button>
+      		<button id="stop">Stop</button>
+      		<button id="next">Next Step</button>
+      		<button id="reset">Reset</button>
+    	</div>
+    	<div class="clearfix"></div>
     </div>
-    <div id="control">
-      	<button id="start">Start Learning</button>
-      	<button id="stop">Stop</button>
-      	<button id="next">Next Step</button>
-    </div>
+    
     <script>
+    	var inLearning = false;
+    	var interval = 20;
+    	
+    	function stopLearning() {
+    		clearInterval(inLearning);
+    		inLearning = false;
+    	}
+    
     	$(document).ready(function(event){
-    		Taxi.view.initializeCanvas();
+    		Taxi.view.initializeView();
     		Taxi.view.initGame();
     	});
+    	
     	$("#next").on("click",function(event){
+    		if(typeof inLearning === 'number') {
+    			stopLearning();
+    		}
     		Taxi.view.nextStep();
     	});
+    	
     	$("#start").on("click",function(event){
-    		Taxi.view.startLearning();
+    		inLearning = setInterval(Taxi.view.nextStep,interval);
     	});
+    	
     	$("#stop").on("click",function(event){
-    		Taxi.view.stopLearning();
+    		stopLearning();
+    	});
+    	
+    	$("#reset").on("click",function(event){
+    		console.log("reset");
+    		
+    		if(typeof inLearning === 'number') {
+    			stopLearning();
+    		}
+    		
+    		Taxi.view.initGame();
     	});
     </script>
     <div id="paperlist">

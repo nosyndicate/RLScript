@@ -8,6 +8,7 @@ Taxi.view = (function() {
 	
 	var canvas;
 	var ctx;
+	var info;
 	var blockWidth = 0,
 		blockHeight = 0,
 		passenger = {
@@ -18,14 +19,15 @@ Taxi.view = (function() {
 			goalY:-1
 		};
 	
-	var inLearning = false;
-	var interval = 25;
+
 
 	
 	// functions
-	function initializeCanvas() {
+	function initializeView() {
 		canvas = $("#taxi").get(0);
 		ctx = canvas.getContext("2d");
+		
+		info = $("#info").get(0);
 	}
 	
 	
@@ -190,26 +192,25 @@ Taxi.view = (function() {
 	}
 
 	function nextStep() {
+		// make one step
 		Taxi.world.update(Taxi.agent);
+		
+		// update the view
 		updateStatus(Taxi.world.getPositionStatus());
+		updateInfo();
 	}
 	
-	function startLearning() {
-		inLearning = setInterval(nextStep, interval);
+	function updateInfo() {
+		info.innerHTML = "iteration"+Taxi.world.getIteration();
 	}
 	
-	function stopLearning() {
-		clearInterval(inLearning);
-	}
 	
 	// public method
 	return {
 		nextStep:nextStep,
-		initializeCanvas:initializeCanvas,
+		initializeView:initializeView,
 		initGame:initGame,
-		drawBackground:drawBackground,
-		startLearning:startLearning,
-		stopLearning:stopLearning
+		drawBackground:drawBackground
 	};
 }());
 

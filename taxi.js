@@ -10,7 +10,6 @@ Taxi.world = (function() {
 	
 	var width = 5;
 	var height = 5;
-	var steps = 1;
 	var taxiX = -1;  // position on the canvas of agent
 	var taxiY = -1;
 	var passengerX = -1;  // position on the canvas of passenger
@@ -20,11 +19,12 @@ Taxi.world = (function() {
 	var passengerState = -1;
 	var desState = -1;
 	var endGame = false;
-	var grid = [[0,0,0,0,0],
+	var iterationCounter = 0;
+/*	var grid = [[0,0,0,0,0],
 	            [0,0,0,0,0],
 	            [0,0,0,0,0],
 	            [0,0,0,0,0],
-	            [0,0,0,0,0]];
+	            [0,0,0,0,0]]; */
 	
 	
 	// define the possible action for the agent
@@ -62,6 +62,7 @@ Taxi.world = (function() {
 	];
 	
 	function update(agent) {
+		iterationCounter++;
     	var action = agent.getAction();
     	var reward = processAction(action);
     	agent.updateCurrentState(taxiX,taxiY,passengerState,desState);
@@ -146,11 +147,6 @@ Taxi.world = (function() {
 		}
 	}
 
-	function start() {
-    	var i = 0;
-
-    
-	}
 
 	function restartGame() {
 		// start a new game, set the flag
@@ -174,7 +170,7 @@ Taxi.world = (function() {
 
 	function init() {
 		Taxi.agent.initAgent();
-		
+		iterationCounter = 0;
 		restartGame();
 	}
 	
@@ -202,13 +198,17 @@ Taxi.world = (function() {
 		return status;
 	}
 	
+	function getIteration() {
+		return iterationCounter;
+	}
 	
 	
 	// public methods
     return {
 		init:init,
 		getPositionStatus:getPositionStatus,
-		update:update
+		update:update,
+		getIteration:getIteration
     };
 
     

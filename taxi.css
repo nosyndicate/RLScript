@@ -22,6 +22,18 @@ body{
     /*border:black solid;*/
 }
 
+#main{
+	/*border:grey solid thin;*/
+	width:800px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:1em;
+	margin-bottom:1em;
+}
+
+.clearfix{
+	clear:both;
+}
 
 #canvas{
     margin-left: auto;
@@ -29,6 +41,7 @@ body{
     margin-top:1em;
     margin-bottom:1em;
     width:500px;
+    float:left;
 }
 
 canvas{
@@ -36,18 +49,27 @@ canvas{
 }
 
 #info{
-	border:grey solid thin;
+	/*border:grey solid thin;*/
+	float:left;
+	width:260px;
+	margin-top:1em;
+	margin-bottom:1em;
+	margin-left:1.5em;
 }
 
 #control{
-    border:black solid thin;
-    margin:auto;
-    width:600px;
+	float:left;
+    /*border:black solid thin;*/
+    margin-top:1em;
+	margin-bottom:1em;
+	margin-left:1em;
+    width:270px;
     text-align:center;
 }
 
 
 #footer{
+    clear:both; /*clear the float*/
     margin-left:auto;
     margin-right:auto;
     margin-top:2em;

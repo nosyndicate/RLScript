@@ -120,8 +120,7 @@ Taxi.agent = (function () {
 		var newValue = 0;
 		if(endGame){
 			newValue = (1-alpha)*value+alpha*reward;
-		}
-		else{
+		} else {
 			newValue = (1-alpha)*value+alpha*(reward+gamma*maxQ(qTable[currentState.hashCode()]));
 		}
 		
