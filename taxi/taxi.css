@@ -60,11 +60,19 @@ canvas{
 #control{
 	float:left;
     /*border:black solid thin;*/
-    margin-top:1em;
+    margin-top:1.3em;
 	margin-bottom:1em;
 	margin-left:1em;
     width:270px;
     text-align:center;
+}
+
+#buttons{
+	margin-bottom:1em;
+}
+
+#learners {
+	width:260px;
 }
 
 

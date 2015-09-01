@@ -186,14 +186,14 @@ Taxi.view = (function() {
 		drawPassenger(status.passengerX, status.passengerY);
 	}
 
-	function initGame() {
-		Taxi.world.init();
+	function initGame(agent) {
+		Taxi.world.init(agent);
 		updateStatus(Taxi.world.getPositionStatus());
 	}
 
 	function nextStep() {
 		// make one step
-		Taxi.world.update(Taxi.agent);
+		Taxi.world.update(Taxi.agents.q);
 		
 		// update the view
 		updateStatus(Taxi.world.getPositionStatus());
@@ -201,7 +201,7 @@ Taxi.view = (function() {
 	}
 	
 	function updateInfo() {
-		info.innerHTML = "iteration"+Taxi.world.getIteration();
+		info.innerHTML = "iteration:"+Taxi.world.getIteration();
 	}
 	
 	
@@ -210,7 +210,7 @@ Taxi.view = (function() {
 		nextStep:nextStep,
 		initializeView:initializeView,
 		initGame:initGame,
-		drawBackground:drawBackground
+		drawBackground:drawBackground,
 	};
 }());
 

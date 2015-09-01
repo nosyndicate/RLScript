@@ -2,19 +2,14 @@
   <head>
     <title>Taxi problem in Reinforcement Learning</title>
     <!-- include the js file -->
-    <script type="text/javascript" src="jquery-1.11.3.js"></script>
-    <script type="text/javascript" src="qlearning.js"></script>
-    <script type="text/javascript" src="util.js"></script>
+    <script type="text/javascript" src="../jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="../util.js"></script>
     <script type="text/javascript" src="taxi.js"></script>
     <script type="text/javascript" src="taxi_view.js"></script>
-    
-
     <!-- include the css file -->
     <link rel="stylesheet" type="text/css" href="taxi.css">
     <meta name="description" content="Taxi problem in Reinforcement learning" />
   </head>
-  <!-- start draw when load the body -->
-<!--  <body onload="VIEW.drawBackground()">-->
 	<body>
     <div id="title">The Taxi Problem</div>
     <div id="description">
@@ -32,30 +27,85 @@
     	<div id="canvas">
       		<canvas width="500" height="500" id="taxi"></canvas>
     	</div>
-    	<div id="info">iteration:0</div>
     	<div id="control">
+    		<div id = "buttons">
       		<button id="start">Start Learning</button>
       		<button id="stop">Stop</button>
       		<button id="next">Next Step</button>
       		<button id="reset">Reset</button>
+      		</div>
+      		<select id = "learners"></select>
     	</div>
+    	<div id="info">iteration:0</div>
     	<div class="clearfix"></div>
     </div>
-    
     <script>
+    
     	var inLearning = false;
     	var interval = 20;
+    	var items = [];
+    	var currentAgent;
+    	
     	
     	function stopLearning() {
     		clearInterval(inLearning);
     		inLearning = false;
     	}
+    	
+    	function selectLearner(index) {
+    		console.log(index);
+    		console.log(items[index]);
+    		Taxi.view.initGame(items[index].object);
+    	}
     
+    	
     	$(document).ready(function(event){
     		Taxi.view.initializeView();
-    		Taxi.view.initGame();
+    		Taxi.view.drawBackground();
+    		
+    		$.getJSON("agents/agents.json", function(data) {
+    			var i = 0;
+        		items = [];
+    			$.each(data, function(key, value) {   				
+    				items[i] = {};
+    				items[i].name = key;
+    				$.each(value, function(subkey, subValue) {
+    					items[i][subkey] = subValue;
+    				});
+    				i++;
+    			});
+    			
+    			// initialize the items in the selections and load the file
+    			$.ajaxSetup({async: false});
+    			for(i = 0;i<items.length;++i) {
+    				console.log(items[i].name);
+        			// only append the option if the script is downloaded
+        			$.getScript(items[i].file, function() {
+        				$("#learners").append("<option>"+items[i].name+"</option>");
+        			});
+        			console.log(currentAgent);
+        			items[i].object = currentAgent;
+        			console.log(items[i].object);
+    			}
+    			$.ajaxSetup({async: true});
+    			
+				selectLearner(0);
+    		
+    		});
+    		
+    		//$.getScript("agents/q/qlearning.js",function(){Taxi.view.initGame(Taxi.agents.q);});
+    		//Taxi.view.initGame();
     	});
     	
+    	
+    	// bound the listener for the select
+    	$("#learners").change(function() {
+    		var index = $("#learners")[0].selectedIndex;
+    		console.log("change index "+index);
+    		selectLearner(index);
+    	})
+    	
+
     	$("#next").on("click",function(event){
     		if(typeof inLearning === 'number') {
     			stopLearning();
@@ -81,6 +131,7 @@
     		Taxi.view.initGame();
     	});
     </script>
+    <!--  <script type="text/javascript" src="agents/q/qlearning.js"></script> -->
     <div id="paperlist">
     </div>
     <div id="footer">

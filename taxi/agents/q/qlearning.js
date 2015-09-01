@@ -1,9 +1,10 @@
 var Taxi = Taxi || {};
-
+Taxi.agents = Taxi.agents || {};
 
 // define the learner class (object) under TAXI module
-Taxi.agent = (function () {
+Taxi.agents.q = (function () {
 	"use strict";
+	
 	
 	var alpha = 0.1;
 	var gamma = 1;
@@ -16,51 +17,9 @@ Taxi.agent = (function () {
 	// 
 	var qTable = {};
 	
-	// define the state class of the learner
-	function State(x, y, passenger, des){
-		this.x = x;
-    	this.y = y;
-    	this.passenger = passenger;
-    	this.des = des;
-	};
 	
-	
-	State.prototype.setFeatures = function(x, y, p, d) {
-		this.x = x;
-		this.y = y;
-		this.passenger = p;
-		this.des = d;
-	};
-	
-	
-	// define hash code function for state class
-	State.prototype.hashCode = function(x,y,p,d) {
-		var len = arguments.length;
-		var x = -1,y = -1, d = -1, p = -1;
-		var ans;
-		if(len===0) {
-    		x = this.x;
-    		y = this.y;
-    		p = this.passenger;
-    		d = this.des;
-		} else if(len===4) {
-    		x = arguments[0];
-    		y = arguments[1];
-    		p = arguments[2];
-    		d = arguments[3];
-		}
-
-		ans = x;
-		ans = ans*10+y;
-		ans = ans*10+p;
-		ans = ans*10+d;
-
-		return ans;
-	};
-	
-	
-	var prevState = new State(-1,-1,-1,-1);
-	var currentState = new State(-1,-1,-1,-1);
+	var prevState = new Taxi.world.State(-1,-1,-1,-1);
+	var currentState = new Taxi.world.State(-1,-1,-1,-1);
 	
 	// initialize the q table
 	function initializeQTable() {
@@ -73,7 +32,7 @@ Taxi.agent = (function () {
 		    			// create a array for new state
 		    			actions = [initQ,initQ,initQ,initQ,initQ,initQ];
 		    			// add it to the table;
-		    			qTable[new State(x,y,p,d).hashCode()] = actions;
+		    			qTable[new Taxi.world.State(x,y,p,d).hashCode()] = actions;
 					}
 	    		}
 			}
@@ -98,7 +57,7 @@ Taxi.agent = (function () {
 	// update the current state
 	function updateCurrentState(x,y,passengerState,desState) {
 		prevState = currentState;
-		currentState = new State(x,y,passengerState,desState);
+		currentState = new Taxi.world.State(x,y,passengerState,desState);
 	}
 	
 	function maxQ(actionList) {
@@ -133,7 +92,9 @@ Taxi.agent = (function () {
 		initAgent:initAgent,
 		getAction:getAction,
 		updateCurrentState:updateCurrentState,
-		updatePolicy:updatePolicy,
-		State:State
+		updatePolicy:updatePolicy
     };
 }());
+
+// register this agent
+currentAgent =  Taxi.agents.q;

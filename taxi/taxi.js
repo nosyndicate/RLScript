@@ -1,7 +1,5 @@
 //MODULE PATTERN
-var Taxi = Taxi||{};
-
-
+var Taxi = Taxi||{}; // define Taxi namespace
 
 //state class (object) under taxi module
 Taxi.world = (function() {
@@ -40,18 +38,18 @@ Taxi.world = (function() {
 	var LocState = {"red":0,"green":1,"yellow":2,"blue":3,"taxi":4};
 	
 	var illegalMove = {};
-	illegalMove[Util.hash.key(1,0)] = "right";
-	illegalMove[Util.hash.key(1,1)] = "right";
-	illegalMove[Util.hash.key(2,0)] = "left";
-	illegalMove[Util.hash.key(2,1)] = "left";
-	illegalMove[Util.hash.key(0,3)] = "right";
-	illegalMove[Util.hash.key(0,4)] = "right";
-	illegalMove[Util.hash.key(1,3)] = "left";
-	illegalMove[Util.hash.key(1,4)] = "left";
-	illegalMove[Util.hash.key(2,3)] = "right";
-	illegalMove[Util.hash.key(2,4)] = "right";
-	illegalMove[Util.hash.key(3,3)] = "left";
-	illegalMove[Util.hash.key(3,4)] = "left";
+	illegalMove[Util.util.hash(1,0)] = "right";
+	illegalMove[Util.util.hash(1,1)] = "right";
+	illegalMove[Util.util.hash(2,0)] = "left";
+	illegalMove[Util.util.hash(2,1)] = "left";
+	illegalMove[Util.util.hash(0,3)] = "right";
+	illegalMove[Util.util.hash(0,4)] = "right";
+	illegalMove[Util.util.hash(1,3)] = "left";
+	illegalMove[Util.util.hash(1,4)] = "left";
+	illegalMove[Util.util.hash(2,3)] = "right";
+	illegalMove[Util.util.hash(2,4)] = "right";
+	illegalMove[Util.util.hash(3,3)] = "left";
+	illegalMove[Util.util.hash(3,4)] = "left";
 	
 	// define the possible location for destination and passenger
 	var location = [
@@ -76,7 +74,7 @@ Taxi.world = (function() {
 	}
 	
 	function checkIllegalMovement(action){		
-		var key = Util.hash.key(taxiX, taxiY);
+		var key = Util.util.hash(taxiX, taxiY);
 		if(illegalMove[key]===action) {
 			//console.log("illegal movement");
 			return false;
@@ -161,15 +159,15 @@ Taxi.world = (function() {
     	//console.log(x+","+y+","+passenger+","+des);
 
     	// set the status for the three objects
-    	Taxi.agent.updateCurrentState(taxiX,taxiY,passengerState,desState);
+    	Taxi.agents.q.updateCurrentState(taxiX,taxiY,passengerState,desState);
 		
     	setPassengerLocation(passengerState);
     	setDestination(desState);
 	}
 	
 
-	function init() {
-		Taxi.agent.initAgent();
+	function init(agent) {
+		agent.initAgent();
 		iterationCounter = 0;
 		restartGame();
 	}
@@ -203,15 +201,61 @@ Taxi.world = (function() {
 	}
 	
 	
+	// define the state class of the learner
+	function State(x, y, passenger, des){
+		this.x = x;
+    	this.y = y;
+    	this.passenger = passenger;
+    	this.des = des;
+	};
+	
+	
+	State.prototype.setFeatures = function(x, y, p, d) {
+		this.x = x;
+		this.y = y;
+		this.passenger = p;
+		this.des = d;
+	};
+	
+	
+	// define hash code function for state class
+	State.prototype.hashCode = function(x,y,p,d) {
+		var len = arguments.length;
+		var x = -1,y = -1, d = -1, p = -1;
+		var ans;
+		if(len===0) {
+    		x = this.x;
+    		y = this.y;
+    		p = this.passenger;
+    		d = this.des;
+		} else if(len===4) {
+    		x = arguments[0];
+    		y = arguments[1];
+    		p = arguments[2];
+    		d = arguments[3];
+		}
+
+		ans = x;
+		ans = ans*10+y;
+		ans = ans*10+p;
+		ans = ans*10+d;
+
+		return ans;
+	};
+	
+	
 	// public methods
     return {
 		init:init,
 		getPositionStatus:getPositionStatus,
 		update:update,
-		getIteration:getIteration
+		getIteration:getIteration,
+		State:State
     };
 
     
-
 }());
+
+
+
 

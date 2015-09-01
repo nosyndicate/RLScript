@@ -8,15 +8,36 @@ Util.math = (function() {
     };
 }());
 
-Util.hash = (function() {
-	function key(x,y){
+Util.util = (function() {
+	function hash(x,y){
 		return x*10+y;
 	}
 	
+	function binarySearch(element, array) {
+		var low = 0;
+		var high = array.length-1;
+		var mid,midValue;
+		while(low <= high) {
+			mid = Math.floor((low+high)/2); // could be float index
+			midValue = array[mid];
+			
+			if(midValue < element)
+				low = mid + 1;
+			else if(midValue > element)
+				high = mid-1;
+			else 
+				return mid;
+		}
+		
+		return -(low+1);
+	}
+	
 	return{
-		key:key
+		hash:hash,
+		binarySearch:binarySearch
 	};
 }());
+
 
 
 Util.rl = (function() {
@@ -65,10 +86,53 @@ Util.rl = (function() {
 		return action;
 	}
 	
+	function boltzmannSelection(temperature, actionList) {
+		var sum = 0;
+		var i = 0,value;
+		var prob = [];
+		for(i = 0;i<actionList.length;++i) {
+			value = actionList[i];
+			value = value/temperature;
+			value = Math.exp(value);
+			sum += value;
+			prob.push(sum);
+		}
+		
+		// normalized it so we have a cumulative probability distribution
+		for(i = 0;i<prob.length;++i) {
+			value = prob[i];
+			value = value/sum;
+			prob[i] = value;
+			
+			if(isNan(value))
+				System.err.print("we have a NaN value");
+		}
+		
+		return selectFrom(prob);
+	}
+	
+	
+	function selectFrom(probList) {
+		var val = Math.random();
+		var index = Util.util.binarySearch(prob, val);
+		
+		if (index < 0)
+		{
+			index = -(index + 1);		// binarySearch(...) returns (-(insertion point) - 1) if the key isn't found
+		}
+		
+		if (index == prob.length)
+			console.error("Error in Boltzmann selection");
+		
+		return index;
+	}
+	
+	
 	
 	return {
 		bestAction:bestAction,
-		epsilonGreedy:epsilonGreedy
+		epsilonGreedy:epsilonGreedy,
+		boltzmannSelection:boltzmannSelection
 	};
 	
 }());
