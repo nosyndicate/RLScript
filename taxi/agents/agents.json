@@ -1,4 +1,5 @@
 {
 	"Q-Learning":{"file":"agents/q/qlearning.js"},
+	"SARSA" :{"file":"agents/sarsa/sarsa.js"},
 	"Q(lambda)" :{"file":"agents/qlambda/qlambda.js"}
 }

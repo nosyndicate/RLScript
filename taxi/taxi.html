@@ -53,9 +53,7 @@
     	}
     	
     	function selectLearner(index) {
-    		console.log(index);
-    		console.log(items[index]);
-    		Taxi.view.initGame(items[index].object);
+    		Taxi.view.initGame(items[index].agent);
     	}
     
     	
@@ -78,17 +76,19 @@
     			// initialize the items in the selections and load the file
     			$.ajaxSetup({async: false});
     			for(i = 0;i<items.length;++i) {
-    				console.log(items[i].name);
+    				//console.log(items[i].name);
         			// only append the option if the script is downloaded
         			$.getScript(items[i].file, function() {
         				$("#learners").append("<option>"+items[i].name+"</option>");
         			});
-        			console.log(currentAgent);
-        			items[i].object = currentAgent;
-        			console.log(items[i].object);
+        			//console.log(currentAgent);
+        			items[i].agent = currentAgent;
+        			//console.log(items[i].agent);
     			}
     			$.ajaxSetup({async: true});
     			
+    			
+    			// select the first learner as default
 				selectLearner(0);
     		
     		});
@@ -101,7 +101,6 @@
     	// bound the listener for the select
     	$("#learners").change(function() {
     		var index = $("#learners")[0].selectedIndex;
-    		console.log("change index "+index);
     		selectLearner(index);
     	})
     	
@@ -122,7 +121,6 @@
     	});
     	
     	$("#reset").on("click",function(event){
-    		console.log("reset");
     		
     		if(typeof inLearning === 'number') {
     			stopLearning();

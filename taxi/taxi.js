@@ -5,7 +5,7 @@ var Taxi = Taxi||{}; // define Taxi namespace
 Taxi.world = (function() {
 	
 	"use strict";
-	
+	var workingAgent;
 	var width = 5;
 	var height = 5;
 	var taxiX = -1;  // position on the canvas of agent
@@ -59,12 +59,12 @@ Taxi.world = (function() {
     	[3,4], // BLUE,
 	];
 	
-	function update(agent) {
+	function update() {
 		iterationCounter++;
-    	var action = agent.getAction();
+    	var action = workingAgent.getAction();
     	var reward = processAction(action);
-    	agent.updateCurrentState(taxiX,taxiY,passengerState,desState);
-    	agent.updatePolicy(reward);
+    	workingAgent.updateCurrentState(taxiX,taxiY,passengerState,desState);
+    	workingAgent.updatePolicy(reward);
     	
     	// if the game is ended, we start a new one
     	if(endGame)
@@ -159,7 +159,7 @@ Taxi.world = (function() {
     	//console.log(x+","+y+","+passenger+","+des);
 
     	// set the status for the three objects
-    	Taxi.agents.q.updateCurrentState(taxiX,taxiY,passengerState,desState);
+    	workingAgent.updateCurrentState(taxiX,taxiY,passengerState,desState);
 		
     	setPassengerLocation(passengerState);
     	setDestination(desState);
@@ -167,9 +167,10 @@ Taxi.world = (function() {
 	
 
 	function init(agent) {
-		agent.initAgent();
+		workingAgent = agent;
 		iterationCounter = 0;
 		restartGame();
+		agent.initAgent();
 	}
 	
 

@@ -193,7 +193,7 @@ Taxi.view = (function() {
 
 	function nextStep() {
 		// make one step
-		Taxi.world.update(Taxi.agents.q);
+		Taxi.world.update();
 		
 		// update the view
 		updateStatus(Taxi.world.getPositionStatus());
