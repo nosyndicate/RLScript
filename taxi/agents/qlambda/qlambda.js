@@ -37,6 +37,5 @@ Taxi.agents.qlambda = (function () {
 }());
 
 // register the agent
-console.log("before");
 currentAgent = Taxi.agents.qlambda;
-console.log("end");
+
