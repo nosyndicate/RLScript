@@ -1,6 +1,5 @@
 <html>
   <head>
-	<!--    <meta http-equiv="refresh" content="0; URL='taxi/taxi.html'" /> -->
 	<title>RLScript - Reinforcement Learning in Javascript</title>
 	<script type="text/javascript" src="../jquery-1.11.3.js"></script>
     
@@ -11,28 +10,36 @@
   </head>
   <body>
   	<img src="logo.png" alt="RLScript">
-  	<div id="nav">
-  		<ul class="nav">
-    		<li><a href='taxi/taxi.html' target="_top">Taxi</a></li>
-    		<li><a href='about.html' target="_top">About</a></li>
-		</ul>
-		<div class="clearfix"></div>
+  	<div class="nav">
+  		<button class="link" href="about.html">About</button>
+  		<button class="link" href="taxi/taxi.html">Taxi</button>
   	</div>
   	<iframe id="iframe" src="taxi/taxi.html" frameborder="0" scrolling="no" id="iframe"></iframe>
   	<script type="text/javascript">
+  		"use strict"
+  	
   		// adjust the height of the iframe
   		function resizeIframe(obj) {
   	    	obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
   	  	}
-  	
-  	
+  		
+  		
   		$(document).ready(function() {
   			$("#iframe").load(function() {
   				resizeIframe(this);
   			})
+  			
+  			// set the content of iframe according to the button attributes
+  			$("button").click(function() {
+  				var link = $(this).attr("href");
+  				$("#iframe")[0].src = link;
+  				resizeIframe($("#iframe")[0]);
+  			});
   		});
   	</script>
-  	
+  	<div id="footer">
+      Developed by Ermo Wei
+    </div>
   </body>
 </html>
 
