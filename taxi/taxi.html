@@ -1,136 +1,170 @@
 <html>
-  <head>
-    <title>Taxi problem in Reinforcement Learning</title>
-    <!-- include the js file -->
-    <script type="text/javascript" src="../jquery-1.11.3.js"></script>
-    <script type="text/javascript" src="../util.js"></script>
-    <script type="text/javascript" src="taxi.js"></script>
-    <script type="text/javascript" src="taxi_view.js"></script>
-    <!-- include the css file -->
-    <link rel="stylesheet" type="text/css" href="taxi.css">
-    <meta name="description" content="Taxi problem in Reinforcement learning" />
-  </head>
-	<body>
-    <div id="title">The Taxi Problem</div>
-    <div id="description">
-    The Taxi Problem is a classical problem in Reinforcement Learning.
-    In this problem, the agent (taxi) needs to pick up the passenger from one of the four colored place and deliver him/her to the destination (also one of the four colored place).
-    The game is in 5 by 5 grid world.
-    There are six actions that are available to the agent in this game: LEFT, RIGHT, UP, DOWN, PICKUP and PUTDOWN.
-    The first four action will make the agent move 1 step forward according to the direction of the action, but won't have effect when the agent hits the wall or boundaries. 
-    At each step, the agent will receive a reward of -1. However, when the delivery is achieved, it will receive a reward of 20. 
-    In some conditions, several actions are illegal. This includes but not limited to take PUTDOWN action when there is no passenger in the taxi or it is not the destination spot, PICKUP a passenger where there is no passenger and so on. 
-    All these illegal action will cause a reward of -10 and change nothing.
-    Thus, without any state abstraction, there are totally 500 states, including 25 position of the taxi, 4 possible location of the destination, and 5 possible location of the passenger (four colors and taxi).
-    </div>
-    <div id="main">
-    	<div id="canvas">
-      		<canvas width="500" height="500" id="taxi"></canvas>
-    	</div>
-    	<div id="control">
-    		<div id = "buttons">
-      		<button id="start">Start Learning</button>
-      		<button id="stop">Stop</button>
-      		<button id="next">Next Step</button>
-      		<button id="reset">Reset</button>
-      		</div>
-      		<select id = "learners"></select>
-    	</div>
-    	<div id="info">iteration:0</div>
-    	<div class="clearfix"></div>
-    </div>
-    <script>
-    
-    	var inLearning = false;
-    	var interval = 20;
-    	var items = [];
-    	var currentAgent;
-    	
-    	
-    	function stopLearning() {
-    		clearInterval(inLearning);
-    		inLearning = false;
-    	}
-    	
-    	function selectLearner(index) {
-    		Taxi.view.initGame(items[index].agent);
-    	}
-    
-    	
-    	$(document).ready(function(event){
-    		Taxi.view.initializeView();
-    		Taxi.view.drawBackground();
-    		
-    		$.getJSON("agents/agents.json", function(data) {
-    			var i = 0;
-        		items = [];
-    			$.each(data, function(key, value) {   				
-    				items[i] = {};
-    				items[i].name = key;
-    				$.each(value, function(subkey, subValue) {
-    					items[i][subkey] = subValue;
-    				});
-    				i++;
-    			});
-    			
-    			// initialize the items in the selections and load the file
-    			$.ajaxSetup({async: false});
-    			for(i = 0;i<items.length;++i) {
-    				//console.log(items[i].name);
-        			// only append the option if the script is downloaded
-        			$.getScript(items[i].file, function() {
-        				$("#learners").append("<option>"+items[i].name+"</option>");
-        			});
-        			//console.log(currentAgent);
-        			items[i].agent = currentAgent;
-        			//console.log(items[i].agent);
-    			}
-    			$.ajaxSetup({async: true});
-    			
-    			
-    			// select the first learner as default
-				selectLearner(0);
-    		
-    		});
-    		
-    		//$.getScript("agents/q/qlearning.js",function(){Taxi.view.initGame(Taxi.agents.q);});
-    		//Taxi.view.initGame();
-    	});
-    	
-    	
-    	// bound the listener for the select
-    	$("#learners").change(function() {
-    		var index = $("#learners")[0].selectedIndex;
-    		selectLearner(index);
-    	})
-    	
+	<head>
+		<title>Taxi problem in Reinforcement Learning</title>
+		<!-- include the js file -->
+		<script type="text/javascript" src="../jquery-1.11.3.js"></script>
+		<script type="text/javascript" src="../util.js"></script>
+		<script type="text/javascript" src="taxi.js"></script>
+		<script type="text/javascript" src="taxi_view.js"></script>
+		<!-- include the css file -->
+		<link rel="stylesheet" type="text/css" href="taxi.css">
+		<link rel="stylesheet" type="text/css" href="../frame.css">
+		<link rel="stylesheet" type="text/css" href="../about.css">
 
-    	$("#next").on("click",function(event){
-    		if(typeof inLearning === 'number') {
-    			stopLearning();
-    		}
-    		Taxi.view.nextStep();
-    	});
-    	
-    	$("#start").on("click",function(event){
-    		inLearning = setInterval(Taxi.view.nextStep,interval);
-    	});
-    	
-    	$("#stop").on("click",function(event){
-    		stopLearning();
-    	});
-    	
-    	$("#reset").on("click",function(event){
+
+		<meta name="description" content="Reinforcement Learning in Javascript" />
+		<meta name="description" content="Taxi problem in Reinforcement learning" />
+		<meta name="keywords" content="RL, reinforcement learning, machine learning, javascript">
+	</head>
+	<body>
+		<img src="../logo.png" alt="RLScript">
+		<div class="nav">
+			<ul>
+				<li><a href="../about.html">About</a></li>
+				<li><a href="taxi.html">Taxi</a></li>
+			</ul>
+		</div>
+		<div id="main">
+			<div id="title">The Taxi Problem</div>
+			<div id="description">The Taxi Problem is a classical problem in
+				Reinforcement Learning. In this problem, the agent (taxi) needs to
+				pick up the passenger from one of the four colored place and deliver
+				him/her to the destination (also one of the four colored place). The
+				game is in 5 by 5 grid world. There are six actions that are
+				available to the agent in this game: LEFT, RIGHT, UP, DOWN, PICKUP
+				and PUTDOWN. The first four action will make the agent move 1 step
+				forward according to the direction of the action, but won't have
+				effect when the agent hits the wall or boundaries. At each step, the
+				agent will receive a reward of -1. However, when the delivery is
+				achieved, it will receive a reward of 20. In some conditions, several
+				actions are illegal. This includes but not limited to take PUTDOWN
+				action when there is no passenger in the taxi or it is not the
+				destination spot, PICKUP a passenger where there is no passenger and
+				so on. All these illegal action will cause a reward of -10 and change
+				nothing. Thus, without any state abstraction, there are totally 500
+				states, including 25 position of the taxi, 4 possible location of the
+				destination, and 5 possible location of the passenger (four colors
+				and taxi).
+			</div>
+			<div id="game">
+				<div id="canvas">
+					<canvas width="500" height="500" id="taxi"></canvas>
+				</div>
+				<div id="panel">
+					<div id="control">
+						<div id="buttons">
+							<button id="start">Start Learning</button>
+							<button id="stop">Stop</button>
+							<button id="next">Next Step</button>
+							<button id="reset">Reset</button>
+						</div>
+						<select id="learners"></select>
+					</div>
+					<div id="info">iteration:0</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<script>
+    
     		
-    		if(typeof inLearning === 'number') {
-    			stopLearning();
-    		}
-    		
-    		Taxi.view.initGame();
-    	});
-    </script>
-    <!--  <script type="text/javascript" src="agents/q/qlearning.js"></script> -->
-    <div id="paperlist">
-    </div>
-  </body>
+				var inLearning = false;
+				var interval = 20;
+				var items = [];
+				var currentAgent;
+
+				function stopLearning() {
+					clearInterval(inLearning);
+					inLearning = false;
+				}
+
+				function selectLearner(index) {
+					Taxi.view.initGame(items[index].agent);
+				}
+
+				$(document).ready(
+						function(event) {
+							Taxi.view.initializeView();
+							Taxi.view.drawBackground();
+
+							$.getJSON("agents/agents.json", function(data) {
+								var i = 0;
+								items = [];
+								$.each(data, function(key, value) {
+									items[i] = {};
+									items[i].name = key;
+									$.each(value, function(subkey, subValue) {
+										items[i][subkey] = subValue;
+									});
+									i++;
+								});
+
+								// initialize the items in the selections and load the file
+								$.ajaxSetup({
+									async : false
+								});
+								for (i = 0; i < items.length; ++i) {
+									//console.log(items[i].name);
+									// only append the option if the script is downloaded
+									$.getScript(items[i].file, function() {
+										$("#learners").append(
+												"<option>" + items[i].name
+														+ "</option>");
+									});
+									//console.log(currentAgent);
+									items[i].agent = currentAgent;
+									//console.log(items[i].agent);
+								}
+								$.ajaxSetup({
+									async : true
+								});
+
+								// select the first learner as default
+								selectLearner(0);
+
+							});
+
+							//$.getScript("agents/q/qlearning.js",function(){Taxi.view.initGame(Taxi.agents.q);});
+							//Taxi.view.initGame();
+						});
+
+				// bound the listener for the select
+				$("#learners").change(function() {
+					var index = $("#learners")[0].selectedIndex;
+					selectLearner(index);
+				})
+
+				$("#next").on("click", function(event) {
+					if (typeof inLearning === 'number') {
+						stopLearning();
+					}
+					Taxi.view.nextStep();
+				});
+
+				$("#start").on("click", function(event) {
+					inLearning = setInterval(Taxi.view.nextStep, interval);
+				});
+
+				$("#stop").on("click", function(event) {
+					stopLearning();
+				});
+
+				$("#reset").on("click", function(event) {
+
+					if (typeof inLearning === 'number') {
+						stopLearning();
+					}
+
+					Taxi.view.initGame();
+				});
+			</script>
+			<!--  <script type="text/javascript" src="agents/q/qlearning.js"></script> -->
+			<div id="paperlist"></div>
+		</div>
+		<div id="footer">Developed by Ermo Wei</div>
+	</body>
 </html>
+
+
+
+
+

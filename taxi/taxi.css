@@ -20,9 +20,9 @@ body{
     /*border:black solid;*/
 }
 
-#main{
+#game{
 	/*border:grey solid thin;*/
-	width:800px;
+	width:100%;
 	margin-left:auto;
 	margin-right:auto;
 	margin-top:1em;
@@ -39,31 +39,35 @@ body{
     margin-top:1em;
     margin-bottom:1em;
     width:500px;
-    float:left;
+	float:left;
 }
 
 canvas{
     border:grey solid thin;
 }
 
+#panel{
+	float:left;
+    /*border:grey solid thin;*/
+    margin-top:1em;
+    margin-bottom:1em;
+	margin-left:1em;
+    text-align:center;
+    width:45%;
+}
+
+#control{
+	
+}
+
 #info{
 	/*border:grey solid thin;*/
-	float:left;
-	width:260px;
 	margin-top:1em;
 	margin-bottom:1em;
 	margin-left:1.5em;
 }
 
-#control{
-	float:left;
-    /*border:black solid thin;*/
-    margin-top:1.3em;
-	margin-bottom:1em;
-	margin-left:1em;
-    width:270px;
-    text-align:center;
-}
+
 
 #buttons{
 	margin-bottom:1em;
@@ -74,11 +78,3 @@ canvas{
 }
 
 
-#footer{
-    clear:both; /*clear the float*/
-    margin-left:auto;
-    margin-right:auto;
-    margin-top:2em;
-    text-align:center;
-    /*    border:thin black solid; */
-}
