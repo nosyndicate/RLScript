@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Taxi problem in Reinforcement Learning</title>
+		<title>Mountain Car Problem in Reinforcement Learning</title>
 		<!-- include the resource file -->
 		<!-- first: the libraries -->
 		<script type="application/javascript" src="../jquery-1.11.3.js"></script>
@@ -12,16 +12,16 @@
 		<!-- include the other file -->
 		
 		<script type="application/javascript" src="../util.js"></script>
-		<script type="application/javascript" src="taxi.js"></script>
-		<script type="application/javascript" src="taxi_view.js"></script>
+		<script type="application/javascript" src="mountain_car.js"></script>
+		<script type="application/javascript" src="mountain_car_view.js"></script>
 		
-		<link rel="stylesheet" type="text/css" href="taxi.css">
+		<link rel="stylesheet" type="text/css" href="mountain_car.css">
 		<link rel="stylesheet" type="text/css" href="../frame.css">
 		<link rel="stylesheet" type="text/css" href="../about.css">
 		
 		<!--  meta data -->
 		<meta name="description" content="Reinforcement Learning in Javascript" />
-		<meta name="description" content="Taxi problem in Reinforcement learning" />
+		<meta name="description" content="Mountain Car Problem in Reinforcement learning" />
 		<meta name="keywords" content="RL, reinforcement learning, machine learning, javascript">
 	</head>
 	<body>
@@ -29,35 +29,18 @@
 		<div class="nav">
 			<ul>
 				<li><a href="../about.html">About</a></li>
-				<li><a href="taxi.html">Taxi</a></li>
-				<li><a href="../mountain_car/mountain_car.html">Mountain Car</a></li>
+				<li><a href="../taxi/taxi.html">Taxi</a></li>
+				<li><a href="mountain_car.html">Mountain Car</a></li>
 			</ul>
 		</div>
 		<div id="main">
-			<div id="title">The Taxi Problem</div>
-			<div id="description">The Taxi Problem is a classical problem in
-				Reinforcement Learning. In this problem, the agent (taxi) needs to
-				pick up the passenger from one of the four colored place and deliver
-				him/her to the destination (also one of the four colored place). The
-				game is in 5 by 5 grid world. There are six actions that are
-				available to the agent in this game: LEFT, RIGHT, UP, DOWN, PICKUP
-				and PUTDOWN. The first four action will make the agent move 1 step
-				forward according to the direction of the action, but won't have
-				effect when the agent hits the wall or boundaries. At each step, the
-				agent will receive a reward of -1. However, when the delivery is
-				achieved, it will receive a reward of 20. In some conditions, several
-				actions are illegal. This includes but not limited to take PUTDOWN
-				action when there is no passenger in the taxi or it is not the
-				destination spot, PICKUP a passenger where there is no passenger and
-				so on. All these illegal action will cause a reward of -10 and change
-				nothing. Thus, without any state abstraction, there are totally 500
-				states, including 25 position of the taxi, 4 possible location of the
-				destination, and 5 possible location of the passenger (four colors
-				and taxi).
+			<div id="title">The Mountain Car Problem</div>
+			<div id="description"> The Mountain Car Problem originally came from the book
+			"Reinforcement Learning: An Introduction", <a href="https://webdocs.cs.ualberta.ca/~sutton/book/ebook/node89.html">Section 8.4</a>
 			</div>
 			<div id="game">
 				<div id="view">
-					<canvas width="500" height="500" id="taxi"></canvas>
+					<canvas width="500" height="500" id="car"></canvas>
 				</div>
 				<div id="panel">
 					<div id="control">
@@ -93,8 +76,8 @@
 
 				$(document).ready(
 						function(event) {
-							Taxi.view.initializeView();
-							Taxi.view.drawBackground();
+							Mountain_car.view.initializeView();
+							Mountain_car.view.drawBackground();
 
 							$.getJSON("agents/agents.json", function(data) {
 								var i = 0;
@@ -164,30 +147,12 @@
 						stopLearning();
 					}
 
-					Taxi.view.initGame();
+					//Taxi.view.initGame();
 				});
 				
 				
 				
-				$(function() {
-
-					var d1 = [];
-					for (var i = 0; i < 14; i += 0.5) {
-						d1.push([i, Math.sin(i)]);
-					}
-
-					var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
-
-					// A null signifies separate line segments
-
-					var d3 = [[0, 12], [7, 12], null, [7, 2.5], [12, 2.5]];
-
-					$.plot("#placeholder", [ d1, d2, d3 ]);
-
-					// Add the Flot version string to the footer
-
-			
-				});
+				
 			</script>
 			<div id="paperlist"></div>
 		</div>
