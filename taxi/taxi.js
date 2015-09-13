@@ -64,7 +64,7 @@ Taxi.world = (function() {
     	var action = workingAgent.getAction();
     	var reward = processAction(action);
     	workingAgent.updateCurrentState(taxiX,taxiY,passengerState,desState);
-    	workingAgent.updatePolicy(reward);
+    	workingAgent.updatePolicy(reward, endGame);
     	
     	// if the game is ended, we start a new one
     	if(endGame)

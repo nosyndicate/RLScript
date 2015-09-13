@@ -6,16 +6,18 @@ Mountain_car.world = (function() {
 	
 	"use strict";
 	var workingAgent;
-	var car_position = -0.5;
-	var car_velocity = 0;
-	var car_last_action = 1;
+	var position = -0.5;
+	var velocity = 0;
+	var carLastAction = 1;
 	
-	var car_min_position = -1.2;
-	var car_max_position = 0.6;
-	var car_max_velocity = 0.07;
-	var car_goal_position = 0.5;
+	var carMinPosition = -1.2;
+	var carMaxPosition = 0.6;
+	var carMaxVelocity = 0.07;
+	var carGoalPosition = 0.5;
 	
-	var random_start = false;
+	var randomStart = false;
+	var iterationCounter = 0;
+	var endGame = false;
 	
 	// define the possible action for the agent
 	var actionSet = [
@@ -29,9 +31,9 @@ Mountain_car.world = (function() {
 		endGame = false;
 		
     	// initialize the game, set the position and velocity of agent
-		if(!random_start) {
-			car_position = -0.5;
-			car_velocity = 0.0;
+		if(!randomStart) {
+			position = -0.5;
+			velocity = 0.0;
 		}
     	//console.log(x+","+y+","+passenger+","+des);
 
@@ -45,8 +47,8 @@ Mountain_car.world = (function() {
 		iterationCounter++;
     	var action = workingAgent.getAction();
     	var reward = processAction(action);
-    	workingAgent.updateCurrentState(car_position, car_velocity);
-    	workingAgent.updatePolicy(reward);
+    	workingAgent.updateCurrentState(position, velocity);
+    	workingAgent.updatePolicy(reward, endGame);
     	
     	// if the game is ended, we start a new one
     	if(endGame)
@@ -64,6 +66,8 @@ Mountain_car.world = (function() {
 	}
 
 	function processAction(action) {
+
+		
 		var regular = -1;
 		var direction = -1;
 		//console.log(actionSet[action]);
@@ -71,23 +75,26 @@ Mountain_car.world = (function() {
 		{
 			case "backward":
 				direction = -1;
+				break;
 			case "still":
 				direction = 0;
+				break;
 			case "forward":
 				direction = 1;
+				break;
 			default:
 				console.error("This should never happen");
 		}
-		var temp = car_velocity + 0.001 * direction - 0.0025 * Math.cos(3*car_position);
-		car_velocity = limit_range(temp, car_max_velocity);
-		temp = car_position + car_velocity;
-		car_position = limit_range2(temp, car_min_position, car_max_position);
+		var temp = velocity + 0.001 * direction - 0.0025 * Math.cos(3*position);
+		velocity = limit_range(temp, carMaxVelocity);
+		temp = position + velocity;
+		position = limit_range2(temp, carMinPosition, carMaxPosition);
 		
-		if((car_position===car_min_position)&&(car_velocity < 0)) {
-			car_velocity = 0;
+		if((position===carMinPosition)&&(velocity < 0)) {
+			velocity = 0;
 		}
 		
-		if(car_position >= car_goal_position)
+		if(position >= carGoalPosition)
 			endGame = true;
 		
 		return regular;
@@ -95,7 +102,7 @@ Mountain_car.world = (function() {
 
 
 	function getCarPosition() {
-		return car_position;
+		return position;
 	}
 	
 
@@ -119,7 +126,10 @@ Mountain_car.world = (function() {
 		init:init,
 		update:update,
 		getIteration:getIteration,
-		getCarPosition:getCarPosition
+		getCarPosition:getCarPosition,
+		getCarMinPosition:carMinPosition,
+		getCarMaxPosition:carMaxPosition,
+		getGoalPosition:carGoalPosition
     };
 
     
