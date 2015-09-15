@@ -1,29 +1,26 @@
 //MODULE PATTERN
-var Mountain_car = Mountain_car||{};
+var MountainCar = MountainCar||{};
 
 
 //view class (object) under taxi module
-Mountain_car.view = (function() {
+MountainCar.view = (function() {
 	"use strict";
 	
 	var canvas;
 	var ctx;
-	var info;
 	
-	var lower = Mountain_car.world.getCarMinPosition;
-	var upper = Mountain_car.world.getCarMaxPosition;
+	var lower = MountainCar.world.getCarMinPosition;
+	var upper = MountainCar.world.getCarMaxPosition;
 	var resolution = -1;
 	var base = 250, scale = 120;
 
 	
 	// functions
-	function initializeView() {
-		canvas = $("#car").get(0);
+	function initializeView(c) {
+		canvas = c;
 		ctx = canvas.getContext("2d");
 	
-		info = $("#info").get(0);
-		
-		
+	
 		// for each pixel on the canvas, what is the increment we need for our curve
 		resolution = (upper-lower)/canvas.width;
 		
@@ -54,7 +51,7 @@ Mountain_car.view = (function() {
 		
 		ctx.beginPath();
 		// then draw the goal position
-		var goalPosition = Mountain_car.world.getGoalPosition;
+		var goalPosition = MountainCar.world.getGoalPosition;
 		x = (goalPosition - lower) / resolution;
 		y = -Math.sin(3*goalPosition) * scale + base;
 		
@@ -94,21 +91,21 @@ Mountain_car.view = (function() {
 	}
 
 	function initGame(agent) {
-		Mountain_car.world.init(agent);
-		updatePosition(Mountain_car.world.getCarPosition());
+		MountainCar.world.init(agent);
+		updatePosition(MountainCar.world.getCarPosition());
 	}
 
 	function nextStep() {
 		// make one step
-		Mountain_car.world.update();
+		MountainCar.world.update();
 		
 		// update the view
-		updatePosition(Mountain_car.world.getCarPosition());
+		updatePosition(MountainCar.world.getCarPosition());
 		updateInfo();
 	}
 	
-	function updateInfo() {
-		info.innerHTML = "iteration:"+Mountain_car.world.getIteration();
+	function updateInfo(info) {
+		info.innerHTML = "iteration:"+MountainCar.world.getIteration();
 	}
 	
 	

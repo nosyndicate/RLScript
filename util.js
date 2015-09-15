@@ -9,6 +9,38 @@ Util.math = (function() {
 }());
 
 Util.util = (function() {
+	
+	// left padding s with c to a total of n chars
+	function paddingLeft(s, c, n) {
+		console.log("paddingLeft");
+	    if (! s || ! c || s.length >= n) {
+	        return s;
+	    }
+
+	    var max = (n - s.length)/c.length;
+	    for (var i = 0; i < max; i++) {
+	        s = c + s;
+	    }
+
+	    return s;
+	}
+
+	// right padding s with c to a total of n chars
+	function paddingRight(s, c, n) {
+	    if (! s || ! c || s.length >= n) {
+	        return s;
+	    }
+
+	    var max = (n - s.length)/c.length;
+	    for (var i = 0; i < max; i++) {
+	        s += c;
+	    }
+
+	    return s;
+	}
+	
+	
+	
 	function hash(x,y){
 		return x*10+y;
 	}
@@ -34,7 +66,9 @@ Util.util = (function() {
 	
 	return{
 		hash:hash,
-		binarySearch:binarySearch
+		binarySearch:binarySearch,
+		paddingLeft:paddingLeft,
+		paddingRight:paddingRight
 	};
 }());
 

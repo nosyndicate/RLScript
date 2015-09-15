@@ -1,5 +1,5 @@
 //MODULE PATTERN
-var Mountain_car = Mountain_car||{}; // define Taxi namespace
+var Grid_world = Mountain_car||{}; // define Taxi namespace
 
 //state class (object) under taxi module
 Mountain_car.world = (function() {

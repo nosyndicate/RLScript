@@ -1,8 +1,8 @@
 //MODULE PATTERN
-var Mountain_car = Mountain_car||{}; // define Taxi namespace
+var MountainCar = MountainCar||{}; // define Taxi namespace
 
 //state class (object) under taxi module
-Mountain_car.world = (function() {
+MountainCar.world = (function() {
 	
 	"use strict";
 	var workingAgent;

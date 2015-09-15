@@ -72,13 +72,14 @@
 				}
 
 				function selectLearner(index) {
-					Mountain_car.view.initGame(items[index].agent);
+					MountainCar.view.initGame(items[index].agent);
 				}
 
 				$(document).ready(
 						function(event) {
-							Mountain_car.view.initializeView();
-							Mountain_car.view.drawBackground();
+							var canvas = $("#car").get(0);
+							MountainCar.view.initializeView(canvas);
+							MountainCar.view.drawBackground();
 							$.getJSON("agents/agents.json", function(data) {
 								var i = 0;
 								items = [];
@@ -130,11 +131,11 @@
 					if (typeof inLearning === 'number') {
 						stopLearning();
 					}
-					Mountain_car.view.nextStep();
+					MountainCar.view.nextStep();
 				});
 
 				$("#start").on("click", function(event) {
-					inLearning = setInterval(Mountain_car.view.nextStep, interval);
+					inLearning = setInterval(MountainCar.view.nextStep, interval);
 				});
 
 				$("#stop").on("click", function(event) {

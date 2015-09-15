@@ -4,8 +4,7 @@ Taxi.agents = Taxi.agents || {};
 // define the learner class (object) under TAXI module
 Taxi.agents.q = (function () {
 	"use strict";
-	
-	
+		
 	var alpha = 0.1;
 	var gamma = 1;
 	var epsilon = 0.1;
@@ -20,6 +19,12 @@ Taxi.agents.q = (function () {
 	
 	var prevState = new Taxi.world.State(-1,-1,-1,-1);
 	var currentState = new Taxi.world.State(-1,-1,-1,-1);
+	
+	
+	var lastActionQValueBeforeUpdate = 0;
+	var lastActionQValueAfterUpdate = 0;
+
+	
 	
 	// initialize the q table
 	function initializeQTable() {
@@ -43,7 +48,9 @@ Taxi.agents.q = (function () {
 		initializeQTable();
 	}
 
-
+	function getLastAction(){
+		return action;
+	}
 
 
 	function getAction() {
@@ -85,16 +92,39 @@ Taxi.agents.q = (function () {
 		
 		
 		qTable[prevState.hashCode()][action] = newValue;
+		lastActionQValueBeforeUpdate = value;
+		lastActionQValueAfterUpdate = newValue;
 	}
+	
+	
+	// define the view object for plotting
+	function view(info) {
+	}
+	
+	
+	function getLastActionQValueBeforeUpdate() {
+		return lastActionQValueBeforeUpdate;
+	}
+	
+	function getLastActionQValueAfterUpdate() {
+		return lastActionQValueAfterUpdate;
+	}
+	
 	
 	// define the q learner
     return {
 		initAgent:initAgent,
 		getAction:getAction,
 		updateCurrentState:updateCurrentState,
-		updatePolicy:updatePolicy
+		updatePolicy:updatePolicy,
+		getLastAction:getLastAction,
+		getLastActionQValueBeforeUpdate:getLastActionQValueBeforeUpdate,
+		getLastActionQValueAfterUpdate:getLastActionQValueAfterUpdate,
+		view:view
     };
 }());
+
+
 
 // register this agent
 currentAgent =  Taxi.agents.q;

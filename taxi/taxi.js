@@ -17,12 +17,14 @@ Taxi.world = (function() {
 	var passengerState = -1;
 	var desState = -1;
 	var endGame = false;
+	
+	
+	
 	var iterationCounter = 0;
-/*	var grid = [[0,0,0,0,0],
-	            [0,0,0,0,0],
-	            [0,0,0,0,0],
-	            [0,0,0,0,0],
-	            [0,0,0,0,0]]; */
+	var currentGameSteps = 0;
+	var currentGame = 1;
+	var perGameSteps = [];
+	var gameStepsArrayLimit = 500;
 	
 	
 	// define the possible action for the agent
@@ -61,6 +63,8 @@ Taxi.world = (function() {
 	
 	function update() {
 		iterationCounter++;
+		currentGameSteps++;
+		
     	var action = workingAgent.getAction();
     	var reward = processAction(action);
     	workingAgent.updateCurrentState(taxiX,taxiY,passengerState,desState);
@@ -69,6 +73,13 @@ Taxi.world = (function() {
     	// if the game is ended, we start a new one
     	if(endGame)
     	{
+    		// put the data in array
+    		perGameSteps.push([currentGame++,currentGameSteps]);
+    		if(perGameSteps.length>gameStepsArrayLimit) {
+    			// get rid of the first one if the data is too much
+    			perGameSteps = perGameSteps.slice(1);
+    		}
+    		
     		restartGame();
     	}
 	}
@@ -149,6 +160,7 @@ Taxi.world = (function() {
 	function restartGame() {
 		// start a new game, set the flag
 		endGame = false;
+		currentGameSteps = 0;
 		
     	// initialize the game, set the position of agent, passenger and destination
     	taxiX = Util.math.randomIntFromInterval(0,4);
@@ -169,6 +181,7 @@ Taxi.world = (function() {
 	function init(agent) {
 		workingAgent = agent;
 		iterationCounter = 0;
+		perGameSteps = [];
 		restartGame();
 		agent.initAgent();
 	}
@@ -245,13 +258,24 @@ Taxi.world = (function() {
 	};
 	
 	
+	function getAgent() {
+		return workingAgent;
+	}
+	
+	function getGameStepsData() {
+		return perGameSteps;
+	}
+	
 	// public methods
     return {
 		init:init,
 		getPositionStatus:getPositionStatus,
 		update:update,
 		getIteration:getIteration,
-		State:State
+		State:State,
+		getAgent:getAgent,
+		getGameStepsData:getGameStepsData,
+		actionSet:actionSet
     };
 
     

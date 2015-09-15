@@ -3,7 +3,7 @@ var Taxi = Taxi||{};
 
 
 //view class (object) under taxi module
-Taxi.view = (function() {
+Taxi.view = (function(model) {
 	"use strict";
 	
 	var canvas;
@@ -19,15 +19,19 @@ Taxi.view = (function() {
 			goalY:-1
 		};
 	
+	var plot = null;
 
 
 	
 	// functions
-	function initializeView() {
-		canvas = $("#taxi").get(0);
+	function initializeView(c) {
+		canvas = c;
 		ctx = canvas.getContext("2d");
-		
 		info = $("#info").get(0);
+		
+		
+		// set the plot
+		plot = $.plot("#plot",[[]]);
 	}
 	
 	
@@ -187,21 +191,48 @@ Taxi.view = (function() {
 	}
 
 	function initGame(agent) {
-		Taxi.world.init(agent);
-		updateStatus(Taxi.world.getPositionStatus());
+		model.init(agent);
+		updateStatus(model.getPositionStatus());
+		updateInfo();
+		//updatePlot();
 	}
 
 	function nextStep() {
 		// make one step
-		Taxi.world.update();
+		model.update();
 		
 		// update the view
-		updateStatus(Taxi.world.getPositionStatus());
+		updateStatus(model.getPositionStatus());
 		updateInfo();
+		updatePlot();
+	}
+	
+	
+	function updatePlot() {
+		plot.setData([model.getGameStepsData()]);
+		plot.setupGrid()
+		plot.draw();
 	}
 	
 	function updateInfo() {
-		info.innerHTML = "iteration:"+Taxi.world.getIteration();
+		// first get the agent
+		var agent = model.getAgent();
+		
+		// then get the last action took
+		var lastAction = agent.getLastAction();
+		lastAction = model.actionSet[lastAction];
+		
+		// get the corresponding action before and after update
+		var oldValue = agent.getLastActionQValueBeforeUpdate();
+		oldValue = oldValue.toFixed(3);
+		var newValue = agent.getLastActionQValueAfterUpdate();
+		newValue = newValue.toFixed(3);
+		
+		
+		var string = "<p>iteration:"+ model.getIteration() +"</p>"
+					+"<p> Q Value: "+ oldValue + " --> "+ newValue + ", last action: " + lastAction+"</p>"
+		
+		info.innerHTML = string;
 	}
 	
 	
@@ -212,7 +243,7 @@ Taxi.view = (function() {
 		initGame:initGame,
 		drawBackground:drawBackground,
 	};
-}());
+}(Taxi.world));
 
 
 
