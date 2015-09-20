@@ -3,6 +3,7 @@ rl.agents = rl.agents || {};
 
 rl.agents.tabular = (function() {
 
+	// Q-Learning
 	function q(game, alpha, gamma, initQ, exploration) {
 		this.alpha = alpha;
 		this.exploration = exploration;
